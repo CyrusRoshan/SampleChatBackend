@@ -32,12 +32,13 @@ func main() {
 	router.Group("/chats", func(r martini.Router) {
 		r.Get("/userchats/:userid", chat.GetChats)       // Get list of all chats for a user
 		r.Get("/messages/:chatid", chat.ViewMessages)    // View chat messages for a chat
+		r.Post("/newchat", chat.NewChat)                 // Create a new chat with specific users
 		r.Post("/sendmessage/:chatid", chat.SendMessage) // Send message to a chat as a user
 	})
 
 	router.Group("/users", func(r martini.Router) {
 		r.Get("/get", users.GetUsers)               // Get list of all users
-		r.Get("/new", users.NewUser)                // Make a new user
+		r.Get("/new/:userName", users.NewUser)      // Make a new user
 		r.Post("/delete/:userid", users.DeleteUser) // Delete a user with a specific id
 	})
 

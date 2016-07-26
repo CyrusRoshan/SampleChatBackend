@@ -29,6 +29,16 @@ func ViewMessages(w http.ResponseWriter, r *http.Request, params martini.Params)
 	return 200, string(utils.MustMarshal(chat.Messages))
 }
 
+func NewChat(w http.ResponseWriter, r *http.Request, params martini.Params) (int, string) {
+	decoder := json.NewDecoder(r.Body)
+	var users []int
+	err := decoder.Decode(&users)
+	utils.PanicIf(err)
+
+	chatid := store.NewChat(users)
+	return 200, string(utils.MustMarshal(chatid))
+}
+
 func SendMessage(w http.ResponseWriter, r *http.Request, params martini.Params) (int, string) {
 	chatidString := params["chatid"]
 	chatid, err := strconv.Atoi(chatidString)

@@ -28,8 +28,11 @@ type Chat struct {
 type UserChats map[int]*Chat
 
 var chatIDstore map[int]bool
-var Users map[int]User
 var ChatStore UserChats
+
+var userIDstore map[int]bool
+var Users map[int]User
+
 var RandomGenerator *rand.Rand
 
 func Setup() {
@@ -62,6 +65,25 @@ func NewChat(users []int) int {
 
 	ChatStore[chatID] = &chat
 	return chatID
+}
+
+func NewUser(name string) int {
+	var userID int
+	for {
+		userID = RandomGenerator.Int()
+		if userIDstore[userID] == false {
+			userIDstore[userID] = true
+			break
+		}
+	}
+
+	Users[userID] = User{
+		Id:    userID,
+		Name:  name,
+		Chats: make(map[int]*Chat),
+	}
+
+	return userID
 }
 
 func (user User) NewMessage(content string, chatId int) error {
